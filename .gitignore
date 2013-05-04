@@ -1,5 +1,4 @@
-# changes a lot
-msg.html
+
 
 #################
 ## Eclipse
@@ -163,4 +162,7 @@ pip-log.txt
 .mr.developer.cfg
 
 # Mac crap
+.DS_Store
+=======
+msg.html
 .DS_Store

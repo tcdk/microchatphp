@@ -1,8 +1,14 @@
 <?php 
 header('Content-type: text/html; charset=utf-8');
 
-$maxlines = 40;
- 
+
+
+if(!@file_exists('config.php') ) {
+  $links = array();  
+} else {
+   include_once('config.php');
+}
+
 require("UrlLinker.php");
 
 function Smilify(&$subject)
@@ -41,9 +47,8 @@ function Smilify(&$subject)
     foreach ($smilies as $smiley => $imgName)
     {
         $size = $sizes[$imgName];
-        array_push($replace, '<img  height="14px" 
-      src="imgs/smiley_emoticons_'.$imgName.'.gif" alt="'.$smiley.'"  />');
-    // onload="this.width/=2;this.onload=null;"
+        array_push($replace, 
+        '<img  height="14px" src="imgs/smiley_emoticons_'.$imgName.'.gif" alt="'.$smiley.'"  />');
     }
     $subject = str_replace(array_keys($smilies), $replace, $subject);
 }
@@ -61,11 +66,9 @@ if (isset($_GET['msg'])){
 	$new_date = strtotime(time()) + strtotime("+0 hours");
 
 	$nick = isset($_GET['nick']) ? $_GET['nick'] : "Hidden";
-	switch ($nick) {
-		case "t": $c = "darkblue"; break;
-		case "r": $c = "darkgreen"; break;
-		default : $c = "black";
-	}
+	$c = "black";
+	if (isset($usercolors[$nick]))
+	  $c = $usercolors[$nick];
 	
 	
 	$nick = $nick . " (" . date('H:i', $new_date).")";
@@ -79,20 +82,12 @@ if (isset($_GET['msg'])){
 
 } else if (isset($_GET['all'])) {
 	
-//	if (abs(time()-filemtime('msg.html'))<5)
-	{
-      // echo abs(time()-filemtime('msg.html'));
-	  $flag = file('msg.html');
-      $content = "";
-      foreach ($flag as $value) {
-	     $content .= html_entity_decode(stripslashes($value));
-	  }
-	  echo $content;
+	$flag = file('msg.html');
+    $content = "";
+    foreach ($flag as $value) {
+	    $content .= html_entity_decode(stripslashes($value));
 	}
-	// else
-	//{
-	//  echo ".";
-	//}
+    echo $content;
 
 }
 

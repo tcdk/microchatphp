@@ -1,8 +1,17 @@
 <?php
 header('Content-type: text/html; charset=utf-8');
 
+
 $useauthuser = true;
 
+if(!@file_exists('config.php') ) {
+  $links = array();  
+} else {
+   include_once('config.php');
+}
+
+// Normally a .htaccess and .htpasswd file would force an auth basic
+// but if it doesnt work, the systeme still need a php auth user to work
 if (($useauthuser) and (!isset($_SERVER['PHP_AUTH_USER']))) {
     header('WWW-Authenticate: Basic realm="My Realm"');
     header('HTTP/1.0 401 Unauthorized');
@@ -10,9 +19,6 @@ if (($useauthuser) and (!isset($_SERVER['PHP_AUTH_USER']))) {
     exit;
 }
 session_start();
-// unset($_SESSION['realm']);
-// session_destroy();
-
 
 
 function createForm(){
@@ -30,6 +36,7 @@ function createForm(){
 <?php
 }
 
+// a bit messy with the u and nickname mixup
 if (isset($_GET['u'])){
    unset($_SESSION['nickname']);
 }
@@ -83,6 +90,10 @@ if (($useauthuser) and (isset($_SERVER['PHP_AUTH_USER']))) {
          }
       }
       
+
+      // clear the input field
+      // if a paramter is added, the input field gets the value appended
+      // and the aret moved to the end of the field
       function clearmsg(s){
 	     var inpObj = document.getElementById("msg");
 		 if (s){
@@ -138,6 +149,7 @@ if (($useauthuser) and (isset($_SERVER['PHP_AUTH_USER']))) {
          }
       }
 
+      // refresh
       function UpdateTimer() {
          if (document.getElementById('msg').value == '') {
            doReload();   
@@ -149,12 +161,6 @@ if (($useauthuser) and (isset($_SERVER['PHP_AUTH_USER']))) {
       function keypressed(e){
          if(e.keyCode=='13'){
             doWork();
-         } else
-         {
-	    	d =  document.getElementById('msg');
-			if (d != null) {
-		     // d.rows += 1;
-		    }
          } 
       }
     //-->
@@ -164,8 +170,11 @@ if (($useauthuser) and (isset($_SERVER['PHP_AUTH_USER']))) {
     <div id="main" align=left valign=left>
       <div style="float:right">
 		  <ul>
-			  <li><a href="http://migmigmigmig.tumblr.com" target="_blank">mig⁴</a></li>
-			  <li><a href="http://migmigmigmig.tumblr.com/submit" target="_blank">Upload</a></li>
+			<?php
+			   foreach($links as $key => $value ) { 
+                 echo "<li><a href='". $value. "' target='_blank'>" . $key ."</a></li>";
+               }
+			?>
 		  </ul>
 	  </div>
 <?php 
@@ -193,12 +202,11 @@ if (($useauthuser) and (isset($_SERVER['PHP_AUTH_USER']))) {
      ?>
       </div>
       <div id="sender" onkeyup="keypressed(event);" style="vertical-align:text-top">
-         Skriv: <!--input type="text" name="msg" style="min-width:250; width:75%; height:35px"
-                id="msg" /-->
+         Msg: 
 		 <textarea cols="30" rows="5" name="msg" id="msg" ></textarea>
          <button onclick="doWork();doReload();">Send</button>
          <div style="float:right">
-         <button onclick="clearmsg();">Slet</button>
+         <button onclick="clearmsg();">Clear</button>
          <img src="imgs/smiley_emoticons_heart.gif" onclick="clearmsg('<3');">&nbsp;
          <img src="imgs/smiley_emoticons_smile.gif" onclick="clearmsg(':)');">&nbsp;
          <img src="imgs/smiley_emoticons_razz.gif" onclick="clearmsg(':p');">&nbsp;
