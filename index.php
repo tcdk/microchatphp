@@ -80,26 +80,35 @@ if (($useauthuser) and (isset($_SERVER['PHP_AUTH_USER']))) {
 	  function addlinetoMsg(s)
 	  {
 	        var objDiv = document.getElementById("result");
-            objDiv.innerHTML += s;
-            objDiv.scrollTop = objDiv.scrollHeight;
-      }
+          objDiv.innerHTML += s;
+          objDiv.scrollTop = objDiv.scrollHeight;
+          d =  document.getElementById('msg');
+          d.style.backgroundImage ='';
+    }
+
 	  function setMsg(s)
 	  {
 	        var objDiv = document.getElementById("result");
-            objDiv.innerHTML = s;
-            objDiv.scrollTop = objDiv.scrollHeight;
-      }
+          objDiv.innerHTML = s;
+          objDiv.scrollTop = objDiv.scrollHeight;
+          d =  document.getElementById('msg');
+          d.style.backgroundImage ='';
+
+    }
       // Change the value of the outputText field
       function handleresponse(){
          if(httpObject.readyState == 4){
             var response = httpObject.responseText;
-            z = response.substr(0,3); // the command
-            response = response.substr(4); // rest
-            if (z == 'one')
-              addlinetoMsg(response);
-            if (z == 'all') {
-              setMsg(response); 
-            } 
+            if (response)
+            {
+              z = response.substr(0,3); // the command
+              response = response.substr(4); // rest
+              if (z == 'one')
+                addlinetoMsg(response);
+              if (z == 'all') {
+                setMsg(response); 
+              } 
+            }
          }
       }
       
@@ -123,6 +132,7 @@ if (($useauthuser) and (isset($_SERVER['PHP_AUTH_USER']))) {
 	  
 	  function sendtoserver(s)
 	  {
+
 		 httpObject = getHTTPObject();
          if (httpObject != null) {
 		      httpObject.open("GET", s , true);
@@ -138,6 +148,7 @@ if (($useauthuser) and (isset($_SERVER['PHP_AUTH_USER']))) {
 		  if (d != null) {
               link = "message.php?nick="+nickName+"&msg="+d.value;
               clearmsg();
+              d.style.backgroundImage  ='url(ajax-loader.gif)';
               sendtoserver(link);
           }
       }
@@ -203,8 +214,10 @@ if (($useauthuser) and (isset($_SERVER['PHP_AUTH_USER']))) {
       </div>
       <div id="sender" onkeyup="keypressed(event);" style="vertical-align:text-top">
          Msg: 
-		 <textarea cols="30" rows="5" name="msg" id="msg" ></textarea>
-         <button onclick="doWork();doReload();">Send</button>
+		  <textarea cols="30" rows="5" name="msg" id="msg" 
+               style="background-repeat:no-repeat;background-image:'url(ajax-loader.gif)" >
+      </textarea>
+         <button onclick="doWork();">Send</button>
          <div style="float:right">
          <button onclick="clearmsg();">Clear</button>
          <img src="imgs/smiley_emoticons_heart.gif" onclick="clearmsg('<3');">&nbsp;

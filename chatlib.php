@@ -26,22 +26,9 @@ function Smilify(&$subject)
         
     );
 
-    $sizes = array(
-        'biggrin' => 20,
-        'cool' => 20,
-        'haha' => 20,
-        'mellow' => 20,
-        'ohmy' => 20,
-        'sad' => 20,
-        'smile' => 18,
-        'tongue' => 20,
-        'wink' => 20,
-    );
-
     $replace = array();
     foreach ($smilies as $smiley => $imgName)
     {
-        $size = $sizes[$imgName];
         array_push($replace, 
         '<img  height="14px" src="imgs/smiley_emoticons_'.$imgName.'.gif" alt="'.$smiley.'"  />');
     }
@@ -50,6 +37,8 @@ function Smilify(&$subject)
 
 function buildline($nick, $text)
 {
+    global $usercolors;
+
 	$c = "black";
 	if (isset($usercolors[$nick]))
 	  $c = $usercolors[$nick];

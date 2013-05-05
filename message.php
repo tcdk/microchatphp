@@ -9,11 +9,8 @@ if(!@file_exists('config.php') ) {
    include_once('config.php');
 }
 
-<<<<<<< HEAD
-=======
 $maxlines = 40;
 require("chatlib.php"); 
->>>>>>> 65d87655639ca83be0cffb58b1b36fb60c5714a1
 require("UrlLinker.php");
 
 if (isset($_GET['msg'])){
@@ -38,17 +35,10 @@ if (isset($_GET['msg'])){
 	$flag = file('msg.html');
     $content = "";
     foreach ($flag as $value) {
-<<<<<<< HEAD
 	    $content .= html_entity_decode(stripslashes($value));
-	}
-    echo $content;
-
-=======
-		$content .= html_entity_decode(stripslashes($value));
 	}
 	echo "all," . $content;
 	
->>>>>>> 65d87655639ca83be0cffb58b1b36fb60c5714a1
 }
 
 	
