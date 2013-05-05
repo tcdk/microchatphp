@@ -63,11 +63,11 @@ if (($useauthuser) and (isset($_SERVER['PHP_AUTH_USER']))) {
     <!--
       var httpObject = null;
       var timerID = 0;
-      var timerinms = 5000;
       var nickName = "<?php echo $nickname; ?>";
 
       // Get the HTTP Object
       var link = "";
+
       function getHTTPObject(){
          if (window.ActiveXObject) return new ActiveXObject("Microsoft.XMLHTTP");
          else if (window.XMLHttpRequest) return new XMLHttpRequest();
@@ -77,16 +77,29 @@ if (($useauthuser) and (isset($_SERVER['PHP_AUTH_USER']))) {
          }
       }   
 
+	  function addlinetoMsg(s)
+	  {
+	        var objDiv = document.getElementById("result");
+            objDiv.innerHTML += s;
+            objDiv.scrollTop = objDiv.scrollHeight;
+      }
+	  function setMsg(s)
+	  {
+	        var objDiv = document.getElementById("result");
+            objDiv.innerHTML = s;
+            objDiv.scrollTop = objDiv.scrollHeight;
+      }
       // Change the value of the outputText field
-      function setOutput(){
+      function handleresponse(){
          if(httpObject.readyState == 4){
             var response = httpObject.responseText;
-            var objDiv = document.getElementById("result");
-            objDiv.innerHTML += response;
-            objDiv.scrollTop = objDiv.scrollHeight;
-            var inpObj = document.getElementById("msg");
-            inpObj.value = "";
-            inpObj.focus();
+            z = response.substr(0,3); // the command
+            response = response.substr(4); // rest
+            if (z == 'one')
+              addlinetoMsg(response);
+            if (z == 'all') {
+              setMsg(response); 
+            } 
          }
       }
       
@@ -106,47 +119,34 @@ if (($useauthuser) and (isset($_SERVER['PHP_AUTH_USER']))) {
           inpObj.value = "";
 		 }	
          inpObj.focus();
+	  }
 	  
+	  function sendtoserver(s)
+	  {
+		 httpObject = getHTTPObject();
+         if (httpObject != null) {
+		      httpObject.open("GET", s , true);
+              httpObject.onreadystatechange = handleresponse;
+              httpObject.send(null);
+         }
+		
 	  }
 
-      // Change the value of the outputText field
-      function setAll(){
-         if(httpObject.readyState == 4){
-            var response = httpObject.responseText;
-            if (response !='.')
-            {
-              var objDiv = document.getElementById("result");
-              objDiv.innerHTML = response;
-              objDiv.scrollTop = objDiv.scrollHeight;
-            }
-         }
-      }
-
       // Implement business logic    
-      function doWork(){     
-         httpObject = getHTTPObject();
-         if (httpObject != null) {
-			d =  document.getElementById('msg');
-			if (d != null) {
+      function doWork(){
+		  d =  document.getElementById('msg');
+		  if (d != null) {
               link = "message.php?nick="+nickName+"&msg="+d.value;
-              httpObject.open("GET", link , true);
-              httpObject.onreadystatechange = setOutput;
-              httpObject.send(null);
-		    }
-         }
-         
+              clearmsg();
+              sendtoserver(link);
+          }
       }
 
       // Implement business logic    
       function doReload(){    
-         httpObject = getHTTPObject();
          var randomnumber=Math.floor(Math.random()*10000);
-         if (httpObject != null) {
-            link = "message.php?all=1&rnd="+randomnumber;
-            httpObject.open("GET", link , true);
-            httpObject.onreadystatechange = setAll;
-            httpObject.send(null);
-         }
+         link = "message.php?all=1&rnd="+randomnumber;
+         sendtoserver(link);
       }
 
       // refresh
