@@ -219,8 +219,7 @@ if (($useauthuser) and (isset($_SERVER['PHP_AUTH_USER']))) {
       <div id="sender" onkeyup="keypressed(event);" style="vertical-align:text-top">
          Msg: 
 		  <textarea cols="30" rows="5" name="msg" id="msg" 
-               style="background-repeat:no-repeat;background-image:'url(ajax-loader.gif)" >
-      </textarea>
+               style="background-repeat:no-repeat;background-image:'url(ajax-loader.gif)" ></textarea>
          <button onclick="doWork();">Send</button>
          <div style="float:right">
          <button onclick="clearmsg();">Clear</button>
