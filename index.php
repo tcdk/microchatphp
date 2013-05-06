@@ -108,6 +108,10 @@ if (($useauthuser) and (isset($_SERVER['PHP_AUTH_USER']))) {
               if (z == 'all') {
                 setMsg(response); 
               } 
+              if (z == 'nul') {
+                d =  document.getElementById('msg');
+          		d.style.backgroundImage ='';
+              }
             }
          }
       }
