@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8 />
+<title>WebRTC test</title>
+<style>
+.askpermission {
+    height: 40px;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 3;
+    background: #550000;
+    text-align: center;
+    font-size: 32px;
+    color: white;
+    transition: height,top 1s;
+    }
+button {
+    height : 100px;
+    vertical-align: top;
+}
+</style>
+</head>
+<body>
+    <div class="askpermission" id="askpermission">^^ Please allow your browser access to the camera ^^</div>
+    <h1 style="display:block">WebRTC test</h1>
+    <p>Just playing with with webRTC api - all your browser to use your web-cam/phone-cam and click on "take picture".</br> <strong>The
+    	picture will be uploaded to my server including information about your server.</strong>
+    </p>
+  
+    <video autoplay></video>
+    <div id="images" style="float:right">Uploaded:<br/></div>
+    <button id="snap" style="display:none">Take picture</button>
+    <canvas id="snapshot" style="display=none"></canvas>
+  
+ <script>
+// De-prefix
+window.URL = window.URL || window.webkitURL;
+navigator.getUserMedia  = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+
+// Ask for permission
+navigator.getUserMedia(
+    {video: true},  // or {audio: true}, or both
+    onSuccess,
+    onFailure);
+
+function onSuccess(stream) {
+    document.getElementById('askpermission').style.top = "-40px";
+    var video = document.querySelector("video");
+    // Connect a 'video' element to the webcam stream
+    // Set stream Blob URI as source for video tag:  <video src="blob:550e8400-e29b-41d4-a716-446655440000" />
+    video.src = window.URL.createObjectURL(stream);
+    var d = document.getElementById('snap');
+    d.style.display="inline-block";
+    d.style.height = video.clientHeight + "px";
+    // document.getElementById('askpermission').hidden=true;
+    // Mozilla has proposed this simplification, whic FF uses:  video.src = stream
+}
+
+function onFailure(e) {
+    document.getElementById('askpermission').innerHTML="Didn't find or get permission to use the camera. Reload to try again";
+}
+
+function onUpload()
+{
+
+}
+function snap() {
+    var snapshot = document.getElementById("snapshot"),
+        video = document.querySelector("video"),
+        b = document.getElementById("snap");
+    b.innerHTML = "wait";
+    snapshot.width=video.clientWidth;
+    snapshot.height=video.clientHeight; 
+    snapshot.getContext("2d").drawImage(video, 0, 0, video.clientWidth, video.clientHeight);
+    console.log(snapshot.toDataURL("image/png"));
+    var canvasData = snapshot.toDataURL("image/png")
+    var xmlHttpReq = false;       
+    if (window.XMLHttpRequest) {
+        ajax = new XMLHttpRequest();
+    }
+
+    else if (window.ActiveXObject) {
+        ajax = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+   ajax.open('POST', 'upload.php', false);
+   ajax.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+   ajax.onreadystatechange = function() {
+        if (ajax.readyState==4 && ajax.status==200)
+        {
+          console.log(ajax.responseText);
+          var d = document.getElementById('images');
+          var img = document.createElement("img");
+          img.src = ajax.responseText;
+          img.width = 60;
+          d.appendChild(img);
+          d.innerHTML += '<br/>'
+
+        }
+
+    }
+   ajax.send("imgData="+canvasData);
+   b.innerHTML = "Take picture";
+ }
+
+document.getElementById("snap").onclick = snap;
+</script>
+</body>
+</html>

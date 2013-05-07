@@ -19,17 +19,11 @@ if (isset($_GET['msg'])){
     	if (isset($_GET['msg']) and (strtolower(trim($_GET['msg'])) == 'clear')) {
 			unlink("msg.html");
 		}
-		if (file_exists('msg.html')) {
-			$f = fopen('msg.html',"a+");
-		} else {
-			$f = fopen('msg.html',"w+");
-		}
-
+		
     
 	    $nick = isset($_GET['nick']) ? $_GET['nick'] : "Hidden";
 	    $line = buildline($nick, $_GET['msg']);
-	    fwrite($f,$line."\r\n");
-	    fclose($f);
+	    addlinetofile($line);
 	    echo "one," . html_entity_decode(stripslashes($line));
  	} else
  	{

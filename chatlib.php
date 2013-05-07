@@ -77,6 +77,17 @@ function Smilify(&$subject)
     $subject = str_replace(array_keys($smilies), $replace, $subject);
 }
 
+function addlinetofile($line)
+{
+	if (file_exists('msg.html')) {
+		$f = fopen('msg.html',"a+");
+	} else {
+		$f = fopen('msg.html',"w+");
+	}
+	fwrite($f,$line."\r\n");
+	fclose($f);
+}
+
 function buildline($nick, $text)
 {
     global $usercolors, $lineformat;
