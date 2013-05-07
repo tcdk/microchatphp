@@ -22,7 +22,9 @@
 			if (@file_exists('chatlib.php')){
 				include_once('chatlib.php');
 				$nickname = isset($_SESSION['nickname']) ? $_SESSION['nickname'] : "Hidden"; 
-				$line = buildline($nickname, "<img src=\"$f\" style=\"max-width:400px\">");
+				$img = '<img src="' . $f .'" style="max-width:310px">';
+				$line = buildline($nickname, $img, $allowhtml=true);
+
 				addlinetofile($line);
 			}  
 		

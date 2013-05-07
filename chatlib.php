@@ -7,6 +7,7 @@ if(!@file_exists('config.php') ) {
    include_once('config.php');
 }
 
+require("UrlLinker.php");
 
 /**
  * version of sprintf for cases where named arguments are desired (python syntax)
@@ -88,7 +89,7 @@ function addlinetofile($line)
 	fclose($f);
 }
 
-function buildline($nick, $text)
+function buildline($nick, $text, $allowhtml = false)
 {
     global $usercolors, $lineformat;
 
@@ -100,7 +101,12 @@ function buildline($nick, $text)
 	$new_date = strtotime(time()) + strtotime("+0 hours");
 
 	$nick = $nick . " (" . date('H:i', $new_date).")";
-    $msg  = isset($_GET['msg']) ? htmlEscapeAndLinkUrls(htmlentities($_GET['msg'], ENT_NOQUOTES, "UTF-8")) : ".";
+    if ($allowhtml==true) {
+       $msg  = isset($text) ? $text : ".";    
+    } else
+    {
+        $msg  = isset($text) ? htmlEscapeAndLinkUrls(htmlentities($text, ENT_NOQUOTES, "UTF-8")) : ".";
+    }
     Smilify($msg);
     $values = array('color' => $c, 'nick' => $nick, 'msg' => $msg);
     $line = sprintfn($lineformat, $values);
