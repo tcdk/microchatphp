@@ -10,6 +10,11 @@ if(!@file_exists('config.php') ) {
    include_once('config.php');
 }
 
+// php5.2 and earlier user php_auth_user, later has remote user
+if ((!isset($_SERVER['PHP_AUTH_USER'])) and (isset($_SERVER['REMOTE_USER'])))
+{
+  $_SERVER['PHP_AUTH_USER'] = $_SERVER['REMOTE_USER']; // php52 and earlier compatible;
+}
 // Normally a .htaccess and .htpasswd file would force an auth basic
 // but if it doesnt work, the systeme still need a php auth user to work
 if (($useauthuser) and (!isset($_SERVER['PHP_AUTH_USER']))) {

@@ -29,7 +29,7 @@ if (isset($_GET['msg'])){
 	    $line = buildline($nick, $_GET['msg']);
 	    fwrite($f,$line."\r\n");
 	    fclose($f);
-	    echo "one," . html_entity_decode(stripslashes($line));
+        echo "one," . stripslashes($line);
  	} else
  	{
  		echo "nul,nul";
@@ -39,7 +39,7 @@ if (isset($_GET['msg'])){
 	$flag = file('msg.html');
     $content = "";
     foreach ($flag as $value) {
-	    $content .= html_entity_decode(stripslashes($value));
+        $content .= stripslashes($value);
 	}
 	echo "all," . $content;
 	

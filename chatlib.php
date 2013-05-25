@@ -80,7 +80,7 @@ function Smilify(&$subject)
 function makeinlinelinksandimages($msg)
 { // takes from http://stackoverflow.com/questions/8027023/regex-php-auto-detect-youtube-image-and-regular-links
 
-   return preg_replace_callback('#(?:https?://\S+)|(?:www.\S+)|(?:\S+\.\S+)#', function($arr)
+   return preg_replace_callback('#(?:https?://\S+)|(?:www.\S+)|(?:\S+\.\w+)#', function($arr)
 {
     if(strpos($arr[0], 'http://') !== 0)
     {
@@ -120,7 +120,7 @@ function buildline($nick, $text)
 
 	$nick = $nick . " (" . date('H:i', $new_date).")";
     $msg = isset($_GET['msg']) ? $_GET['msg'] : ".";
-    $msg = htmlentities($_GET['msg'], ENT_NOQUOTES, "UTF-8");
+    $msg = htmlentities($msg, ENT_NOQUOTES, "UTF-8");
     $msg = makeinlinelinksandimages($msg);
     Smilify($msg);
     
