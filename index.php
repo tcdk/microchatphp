@@ -69,6 +69,7 @@ if (($useauthuser) and (isset($_SERVER['PHP_AUTH_USER']))) {
       var httpObject = null;
       var timerID = 0;
       var nickName = "<?php echo $nickname; ?>";
+      var lasthtml = "";
 
       // Get the HTTP Object
       var link = "";
@@ -94,9 +95,10 @@ if (($useauthuser) and (isset($_SERVER['PHP_AUTH_USER']))) {
 	  function setMsg(s)
 	  {
 	        var objDiv = document.getElementById("result");
-          if (objDiv.innerHTML != s)
+          if (s != lasthtml)
           {
             objDiv.innerHTML = s;
+            lasthtml = s;
             objDiv.scrollTop = objDiv.scrollHeight;
           }
           d =  document.getElementById('msg');
