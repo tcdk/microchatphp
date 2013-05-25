@@ -94,8 +94,11 @@ if (($useauthuser) and (isset($_SERVER['PHP_AUTH_USER']))) {
 	  function setMsg(s)
 	  {
 	        var objDiv = document.getElementById("result");
-          objDiv.innerHTML = s;
-          objDiv.scrollTop = objDiv.scrollHeight;
+          if (objDiv.innerHTML != s)
+          {
+            objDiv.innerHTML = s;
+            objDiv.scrollTop = objDiv.scrollHeight;
+          }
           d =  document.getElementById('msg');
           d.style.backgroundImage ='';
 
@@ -217,7 +220,7 @@ if (($useauthuser) and (isset($_SERVER['PHP_AUTH_USER']))) {
      <?php 
         $data = file("msg.html");
         foreach ($data as $line) {
-        	echo html_entity_decode(stripslashes($line));
+        	echo stripslashes($line);
         }
      ?>
       </div>

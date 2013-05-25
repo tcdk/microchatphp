@@ -82,17 +82,18 @@ function makeinlinelinksandimages($msg)
 
    return preg_replace_callback('#(?:https?://\S+)|(?:www.\S+)|(?:\S+\.\w+)#', function($arr)
 {
+    $url = parse_url($arr[0]);
+    if(preg_match('#\.(png|jpg|gif)$#', $url['path']))
+    {
+        return '<img style="max-width:313px;" src="'. $arr[0] . '" />';
+    }
     if(strpos($arr[0], 'http://') !== 0)
     {
         $arr[0] = 'http://' . $arr[0];
     }
     $url = parse_url($arr[0]);
-
     // images
-    if(preg_match('#\.(png|jpg|gif)$#', $url['path']))
-    {
-        return '<img style="max-width:313px;" src="'. $arr[0] . '" />';
-    }
+   
     // youtube
     if(in_array($url['host'], array('www.youtube.com', 'youtube.com'))
       && $url['path'] == '/watch'
@@ -119,7 +120,7 @@ function buildline($nick, $text)
 	$new_date = strtotime(time()) + strtotime("+0 hours");
 
 	$nick = $nick . " (" . date('H:i', $new_date).")";
-    $msg = isset($_GET['msg']) ? $_GET['msg'] : ".";
+    $msg = isset($text) ? $text : ".";
     $msg = htmlentities($msg, ENT_NOQUOTES, "UTF-8");
     $msg = makeinlinelinksandimages($msg);
     Smilify($msg);
