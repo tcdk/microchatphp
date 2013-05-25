@@ -11,7 +11,6 @@ if(!@file_exists('config.php') ) {
 
 $maxlines = 40;
 require("chatlib.php"); 
-require("UrlLinker.php");
 
 if (isset($_GET['msg'])){
 	if (trim($_GET['msg'])!='')

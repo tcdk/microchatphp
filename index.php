@@ -56,7 +56,7 @@ if (($useauthuser) and (isset($_SERVER['PHP_AUTH_USER']))) {
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-   <title>r</title>
+   <title>chat</title>
    <link href="style/style2.css" rel="stylesheet" type="text/css" />
    
     <script language="javascript" type="text/javascript">
