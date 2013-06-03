@@ -1,5 +1,7 @@
 snap.html
 upload.php
+images/
+*.log
 
 #################
 ## Eclipse

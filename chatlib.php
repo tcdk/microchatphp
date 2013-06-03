@@ -83,7 +83,7 @@ function makeinlinelinksandimages($msg)
    return preg_replace_callback('#(?:https?://\S+)|(?:www.\S+)|(?:\S+\.\w+)#', function($arr)
 {
     $url = parse_url($arr[0]);
-    if(preg_match('#\.(png|jpg|gif)$#', $url['path']))
+    if(preg_match('#\.(png|jpg|jpeg|gif)$#', $url['path']))
     {
         return '<img style="max-width:313px;" src="'. $arr[0] . '" />';
     }
@@ -108,11 +108,35 @@ function makeinlinelinksandimages($msg)
 }
 
 
+function addline2file($line)
+{
+
+			if (file_exists('msg.html')) {
+				$msgf = fopen('msg.html',"a+");
+			} else {
+				$msgf = fopen('msg.html',"w+");
+			}
+			fwrite($msgf,$line."\r\n");
+	    	fclose($msgf);
+			
+}
+
+function writetolog($txt = '')
+{
+	$logfilename = @date('dmY-H').'.log';
+	if (file_exists($logfilename)) {
+		$f = fopen($logfilename,"a+");
+	} else {
+		$f = fopen($logfilename,"w+");
+	}
+
+	$nick = isset($_SERVER['PHP_AUTH_USER']) ? $_SERVER['PHP_AUTH_USER'] : $_SERVER['REMOTE_USER'];
+	fwrite($f,$nick." : ".@date('[d/m/Y:H:i:s]')." ".$txt."\r\n");
+}
+
 function buildline($nick, $text)
 {
     global $usercolors, $lineformat;
-
-
 	$c = "black";
 	if (isset($usercolors[$nick]))
 	  $c = $usercolors[$nick];

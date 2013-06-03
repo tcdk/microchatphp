@@ -238,7 +238,14 @@ if (($useauthuser) and (isset($_SERVER['PHP_AUTH_USER']))) {
          <img src="imgs/smiley_emoticons_razz.gif" onclick="clearmsg(':p');">&nbsp;
          <img src="imgs/smiley_emoticons_bussi.gif" onclick="clearmsg(':*');">
          </div>
-      </div>   
+      </div>  
+      <div id="upload">
+		<form enctype="multipart/form-data" action="uploadfile.php" method="POST">
+		<input type="hidden" name="MAX_FILE_SIZE" value="5000000" />
+		Photo: <input name="userfile" type="file" />
+		<input type="submit" value="Send File" />
+		</form>
+	  </div> 
 <?php            
     }
 
