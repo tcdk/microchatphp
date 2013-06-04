@@ -21,5 +21,4 @@ And then requires a .htpasswd file. If auth basic isn't used the code will ask f
 ## to-do ##
 
 - [ ] use something more "pushy" for the refresh, instead of reloading every 5 sec
-- [ ] inline display of images
 - [ ] use my webrtc_snap module for taking photos
