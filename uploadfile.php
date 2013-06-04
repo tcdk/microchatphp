@@ -8,57 +8,6 @@ $uploadfile = str_replace(' ', '_', $uploadfile);
 
 $maxwidth = 315;
 
-
-function resize( $filename, $newfilename, $maxw, $maxh, $quality=85 )
-{
-  $ext = strtolower( pathinfo( $filename, PATHINFO_EXTENSION ) );
-  switch($ext)
-  {
-    case 'jpeg':
-    case 'jpe':
-    case 'jpg':
-      $srcim = imagecreatefromjpeg( $filename );
-      break;
-    case 'gif':
-      $srcim = imagecreatefromgif( $filename );
-      break;
-    case 'png':
-      $srcim = imagecreatefrompng( $filename );
-      break;
-    default:
-      return false;
-  }
-  $ow = imagesx( $srcim );
-  $oh = imagesy( $srcim );
-  $wscale = $maxw / $ow;
-  $hscale = $maxh / $oh;
-  $scale = min( $hscale, $wscale );
-  $nw = round( $ow * $scale, 0 );
-  $nh = round( $oh * $scale, 0 );
-  $dstim = imagecreatetruecolor( $nw, $nh );
-  imagecopyresampled( $dstim, $srcim, 0, 0, 0, 0, $nw, $nh, $ow, $oh );
-  switch($ext)
-  {
-    case 'jpeg':
-    case 'jpe':
-    case 'jpg':
-      imagejpeg( $dstim, $newfilename, $quality );
-      break;
-    case 'gif':
-      imagegif( $dstim, $newfilename );
-      break;
-    case 'png':
-      $png_q = floor( abs( $quality / 10 - 9.9 ) );
-      imagepng( $dstim, $newfilename, $png_q );
-      break;
-    default:
-      return false;
-  }
-  imagedestroy( $dstim );
-  imagedestroy( $srcim );
-  return file_exists($newfilename);
-}
-
 $allowedExts = array("gif", "jpeg", "jpg", "png");
 $extension = strtolower(end(explode(".", $_FILES["userfile"]["name"])));
 $filetype = $_FILES["userfile"]["type"];
@@ -78,7 +27,7 @@ if  (($_FILES["userfile"]["size"] < 5000000)
     $newfilename = strtolower($uploaddir  . 'sml_'. (string)rand(10000,99999) .  str_replace(' ', '_', basename($_FILES['userfile']['name'])));
 		writetolog('newfile:'.$uploadfile.' to '.$newfilename);
 		
-		if (resize($uploadfile, $newfilename, 313,600,75))
+		if (resizeimage($uploadfile, $newfilename, 313,600,75))
 		{
 			$line = buildline('pic', $newfilename);
 		} else

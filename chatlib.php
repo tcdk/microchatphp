@@ -107,6 +107,57 @@ function makeinlinelinksandimages($msg)
 }, $msg);
 }
 
+function resizeimage( $filename, $newfilename, $maxw, $maxh, $quality=85, $forceext = '' )
+{
+  $ext = strtolower( pathinfo( $filename, PATHINFO_EXTENSION ) );
+  switch($ext)
+  {
+    case 'jpeg':
+    case 'jpe':
+    case 'jpg':
+      $srcim = imagecreatefromjpeg( $filename );
+      break;
+    case 'gif':
+      $srcim = imagecreatefromgif( $filename );
+      break;
+    case 'png':
+      $srcim = imagecreatefrompng( $filename );
+      break;
+    default:
+      return false;
+  }
+  $ow = imagesx( $srcim );
+  $oh = imagesy( $srcim );
+  $wscale = $maxw / $ow;
+  $hscale = $maxh / $oh;
+  $scale = min( $hscale, $wscale );
+  $nw = round( $ow * $scale, 0 );
+  $nh = round( $oh * $scale, 0 );
+  $dstim = imagecreatetruecolor( $nw, $nh );
+  imagecopyresampled( $dstim, $srcim, 0, 0, 0, 0, $nw, $nh, $ow, $oh );
+  if ($forceext)
+     $ext = $forceext;
+  switch($ext)
+  {
+    case 'jpeg':
+    case 'jpe':
+    case 'jpg':
+      imagejpeg( $dstim, $newfilename, $quality );
+      break;
+    case 'gif':
+      imagegif( $dstim, $newfilename );
+      break;
+    case 'png':
+      $png_q = floor( abs( $quality / 10 - 9.9 ) );
+      imagepng( $dstim, $newfilename, $png_q );
+      break;
+    default:
+      return false;
+  }
+  imagedestroy( $dstim );
+  imagedestroy( $srcim );
+  return file_exists($newfilename);
+}
 
 function addline2file($line)
 {
