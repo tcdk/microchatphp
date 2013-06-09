@@ -174,7 +174,12 @@ function addline2file($line)
 
 function writetolog($txt = '')
 {
-	$logfilename = @date('dmY-H').'.log';
+	global $timedelta;
+
+
+	$new_date = strtotime(time()) + strtotime($timedelta);
+
+	$logfilename = @date('dmY-H', $new_date).'.log';
 	if (file_exists($logfilename)) {
 		$f = fopen($logfilename,"a+");
 	} else {
@@ -182,17 +187,17 @@ function writetolog($txt = '')
 	}
 
 	$nick = isset($_SERVER['PHP_AUTH_USER']) ? $_SERVER['PHP_AUTH_USER'] : $_SERVER['REMOTE_USER'];
-	fwrite($f,$nick." : ".@date('[d/m/Y:H:i:s]')." ".$txt."\r\n");
+	fwrite($f,$nick." : ".@date('[d/m/Y:H:i:s]', $new_date)." ".$txt."\r\n");
 }
 
 function buildline($nick, $text)
 {
-    global $usercolors, $lineformat;
+    global $usercolors, $lineformat, $timedelta;
 	$c = "black";
 	if (isset($usercolors[$nick]))
 	  $c = $usercolors[$nick];
 	
-	$new_date = strtotime(time()) + strtotime("+0 hours");
+	$new_date = strtotime(time()) + strtotime($timedelta);
 
 	$nick = $nick . " (" . date('H:i', $new_date).")";
     $msg = isset($text) ? $text : ".";

@@ -1,5 +1,7 @@
 <?php
 
+  $timedelta = "+0 hours";
+
 	// how to format each line
 	$lineformat = "<p><span class=\"name\" style=\"color: %(color)s\">%(nick)s </span><span class=\"txt\">%(msg)s</span></p>";
 
