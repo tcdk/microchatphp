@@ -107,7 +107,7 @@ function makeinlinelinksandimages($msg)
 }, $msg);
 }
 
-function resizeimage( $filename, $newfilename, $maxw, $maxh, $quality=85, $forceext = '' )
+function resizeimage( $filename, $newfilename, $maxw, $maxh, $quality=85, $forceext = '', $resizegif = false)
 {
   $ext = strtolower( pathinfo( $filename, PATHINFO_EXTENSION ) );
   switch($ext)
@@ -118,7 +118,14 @@ function resizeimage( $filename, $newfilename, $maxw, $maxh, $quality=85, $force
       $srcim = imagecreatefromjpeg( $filename );
       break;
     case 'gif':
-      $srcim = imagecreatefromgif( $filename );
+      if ($resizegif)
+      {
+        $srcim = imagecreatefromgif( $filename );
+      } else
+      {  // don't resize gifs - destroys animation
+        copy($filename, $newfilename);
+        return file_exists($newfilename); 
+      }
       break;
     case 'png':
       $srcim = imagecreatefrompng( $filename );
