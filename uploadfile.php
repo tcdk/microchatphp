@@ -15,7 +15,11 @@ $extension = strtolower(end(explode(".", $_FILES["userfile"]["name"])));
 $filetype = $_FILES["userfile"]["type"];
 include 'chatlib.php';	
 
-writetolog('newfile:'. $uploadfile.','.$filetype);
+writetolog('newfile(name):'. $_FILES["userfile"]["name"]);
+writetolog('newfile(temp):'. $_FILES['userfile']['tmp_name']);
+writetolog('newfile(new.):'. $uploadfile.', type:'.$filetype . ', ext:'. $extension);
+writetolog('newfile(size):'. $_FILES['userfile']['size']);
+
 
 // currently not checking for filetypes - android browser returns application/octetstream 
 //if ((($filetype == "image/gif") || ($_FILES["userfile"]["type"] == "image/jpeg")

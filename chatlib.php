@@ -133,6 +133,21 @@ function resizeimage( $filename, $newfilename, $maxw, $maxh, $quality=85, $force
     default:
       return false;
   }
+   // rotate if exif says so 
+  $exif = exif_read_data($filename);
+  if(!empty($exif['Orientation'])) {
+    switch($exif['Orientation']) {
+        case 8:
+            $srcim = imagerotate($srcim,90,0);
+            break;
+        case 3:
+            $srcim = imagerotate($srcim,180,0);
+            break;
+        case 6:
+            $srcim = imagerotate($srcim,-90,0);
+            break;
+    }
+  }
   $ow = imagesx( $srcim );
   $oh = imagesy( $srcim );
   $wscale = $maxw / $ow;
@@ -142,6 +157,10 @@ function resizeimage( $filename, $newfilename, $maxw, $maxh, $quality=85, $force
   $nh = round( $oh * $scale, 0 );
   $dstim = imagecreatetruecolor( $nw, $nh );
   imagecopyresampled( $dstim, $srcim, 0, 0, 0, 0, $nw, $nh, $ow, $oh );
+
+ 
+
+
   if ($forceext)
      $ext = $forceext;
   switch($ext)
