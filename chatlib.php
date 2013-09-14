@@ -87,7 +87,7 @@ function makeinlinelinksandimages($msg)
     {
         return '<img style="max-width:313px;" src="'. $arr[0] . '" />';
     }
-    if(strpos($arr[0], 'http://') !== 0)
+    if (strpos($arr[0], 'http') !== 0) 
     {
         $arr[0] = 'http://' . $arr[0];
     }
