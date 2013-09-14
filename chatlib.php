@@ -94,6 +94,16 @@ function makeinlinelinksandimages($msg)
     $url = parse_url($arr[0]);
     // images
    
+    // instagram
+    if(in_array($url['host'], array('instagram.com')))
+    {
+        $p = explode('/', $url['path']);
+        if ($p[1] == 'p')
+        {
+          return sprintf('<img style="max-width:313px;" src="http://instagram.com/p/%s/media" />', $p[2]);
+        }  
+    }
+
     // youtube
     if(in_array($url['host'], array('www.youtube.com', 'youtube.com'))
       && $url['path'] == '/watch'
