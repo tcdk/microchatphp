@@ -9,6 +9,8 @@ if(!@file_exists('config.php') ) {
 } else {
    include_once('config.php');
 }
+$maxlines = 40;
+require("chatlib.php"); 
 
 // php5.2 and earlier user php_auth_user, later has remote user
 if ((!isset($_SERVER['PHP_AUTH_USER'])) and (isset($_SERVER['REMOTE_USER'])))
@@ -224,6 +226,7 @@ if (($useauthuser) and (isset($_SERVER['PHP_AUTH_USER']))) {
         foreach ($data as $line) {
         	echo stripslashes($line);
         }
+        writetolog('First load')
      ?>
       </div>
       <div id="sender" onkeyup="keypressed(event);" style="vertical-align:text-top">

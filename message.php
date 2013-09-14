@@ -15,6 +15,7 @@ require("chatlib.php");
 if (isset($_GET['msg'])){
 	if (trim($_GET['msg'])!='')
     {
+        writetolog('msg');
     	if (isset($_GET['msg']) and (strtolower(trim($_GET['msg'])) == 'clear')) {
 			unlink("msg.html");
 		}
