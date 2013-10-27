@@ -215,7 +215,7 @@ function writetolog($txt = '')
 
 	$new_date = strtotime(time()) + strtotime($timedelta);
 
-	$logfilename = @date('dmY-H', $new_date).'.log';
+	$logfilename = 'log/'. @date('dmY-H', $new_date).'.log';
 	if (file_exists($logfilename)) {
 		$f = fopen($logfilename,"a+");
 	} else {
