@@ -122,7 +122,7 @@ if (($useauthuser) and (isset($_SERVER['PHP_AUTH_USER']))) {
               } 
               if (z == 'nul') {
                 d =  document.getElementById('msg');
-          		d.style.backgroundImage ='';
+            		d.style.backgroundImage ='';
               }
             }
          }
@@ -179,9 +179,13 @@ if (($useauthuser) and (isset($_SERVER['PHP_AUTH_USER']))) {
       // refresh
       function UpdateTimer() {
          if (document.getElementById('msg').value == '') {
-           doReload();   
+           doReload();
+           timerID = setTimeout("UpdateTimer()", 5000);  // if nothing happens wait 5 seconds 
+         } else 
+         {
+           timerID = setTimeout("UpdateTimer()", 500); // if we are not loading anyway, check every second
          }
-         timerID = setTimeout("UpdateTimer()", 5000);
+         
       }
     
     
